@@ -1,0 +1,203 @@
+
+ATMega32_SPI_Flash_Firmware.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000e6  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .comment      00000030  00000000  00000000  0000013a  2**0
+                  CONTENTS, READONLY
+  2 .debug_aranges 00000020  00000000  00000000  0000016a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   000002c7  00000000  00000000  0000018a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 00000190  00000000  00000000  00000451  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   000000e1  00000000  00000000  000005e1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000038  00000000  00000000  000006c4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    00000292  00000000  00000000  000006fc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    0000008c  00000000  00000000  0000098e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000040  00000000  00000000  00000a1a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 71 00 	jmp	0xe2	; 0xe2 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+		}
+	private:	
+	
+};
+
+int main(void) {
+  6c:	cf 93       	push	r28
+  6e:	df 93       	push	r29
+  70:	cd b7       	in	r28, 0x3d	; 61
+  72:	de b7       	in	r29, 0x3e	; 62
+  74:	da 95       	dec	r29
+  76:	0f b6       	in	r0, 0x3f	; 63
+  78:	f8 94       	cli
+  7a:	de bf       	out	0x3e, r29	; 62
+  7c:	0f be       	out	0x3f, r0	; 63
+  7e:	cd bf       	out	0x3d, r28	; 61
+	
+	public:
+		SPI_M45PE16(){}
+			
+		void spi_init(){
+			DDRB |= (1<<4) | (1<<5) | (1<<7);
+  80:	87 b3       	in	r24, 0x17	; 23
+  82:	80 6b       	ori	r24, 0xB0	; 176
+  84:	87 bb       	out	0x17, r24	; 23
+			SPCR |= (1<<SPE) | (1<<MSTR) | (1<<SPR0);
+  86:	8d b1       	in	r24, 0x0d	; 13
+  88:	81 65       	ori	r24, 0x51	; 81
+  8a:	8d b9       	out	0x0d, r24	; 13
+			SPSR = 0x00;
+  8c:	1e b8       	out	0x0e, r1	; 14
+  8e:	20 e2       	ldi	r18, 0x20	; 32
+  90:	30 e0       	ldi	r19, 0x00	; 0
+		}
+		
+		void spi_write(uint8_t data) {
+			FLASH_CS_LOW();
+			SPDR = data;
+  92:	76 e0       	ldi	r23, 0x06	; 6
+			spi_write(WREN);
+			//_delay_ms(10);
+			
+			FLASH_CS_LOW();
+			
+			SPDR = READ; WAIT_TRANSFER();
+  94:	63 e0       	ldi	r22, 0x03	; 3
+  96:	ce 01       	movw	r24, r28
+  98:	93 95       	inc	r25
+			SPDR = (uint8_t) page_address;			WAIT_TRANSFER();
+			SPDR = (uint8_t) (page_address>8);		WAIT_TRANSFER();
+			SPDR = (uint8_t) (page_address>>16);	WAIT_TRANSFER();
+			
+			for(int i=0;i<length;i++){
+				SPDR = 0xF0; WAIT_TRANSFER();
+  9a:	50 ef       	ldi	r21, 0xF0	; 240
+			SPCR |= (1<<SPE) | (1<<MSTR) | (1<<SPR0);
+			SPSR = 0x00;
+		}
+		
+		void spi_write(uint8_t data) {
+			FLASH_CS_LOW();
+  9c:	c4 98       	cbi	0x18, 4	; 24
+			SPDR = data;
+  9e:	7f b9       	out	0x0f, r23	; 15
+			WAIT_TRANSFER();
+  a0:	77 9b       	sbis	0x0e, 7	; 14
+  a2:	fe cf       	rjmp	.-4      	; 0xa0 <main+0x34>
+			FLASH_CS_HIGH();
+  a4:	c4 9a       	sbi	0x18, 4	; 24
+
+		void spi_page_read(uint32_t page_address,uint8_t * buffer,uint8_t length){
+			spi_write(WREN);
+			//_delay_ms(10);
+			
+			FLASH_CS_LOW();
+  a6:	c4 98       	cbi	0x18, 4	; 24
+			
+			SPDR = READ; WAIT_TRANSFER();
+  a8:	6f b9       	out	0x0f, r22	; 15
+  aa:	77 9b       	sbis	0x0e, 7	; 14
+  ac:	fe cf       	rjmp	.-4      	; 0xaa <main+0x3e>
+			
+			SPDR = (uint8_t) page_address;			WAIT_TRANSFER();
+  ae:	1f b8       	out	0x0f, r1	; 15
+  b0:	77 9b       	sbis	0x0e, 7	; 14
+  b2:	fe cf       	rjmp	.-4      	; 0xb0 <main+0x44>
+			SPDR = (uint8_t) (page_address>8);		WAIT_TRANSFER();
+  b4:	1f b8       	out	0x0f, r1	; 15
+  b6:	77 9b       	sbis	0x0e, 7	; 14
+  b8:	fe cf       	rjmp	.-4      	; 0xb6 <main+0x4a>
+			SPDR = (uint8_t) (page_address>>16);	WAIT_TRANSFER();
+  ba:	1f b8       	out	0x0f, r1	; 15
+  bc:	77 9b       	sbis	0x0e, 7	; 14
+  be:	fe cf       	rjmp	.-4      	; 0xbc <main+0x50>
+  c0:	fe 01       	movw	r30, r28
+  c2:	31 96       	adiw	r30, 0x01	; 1
+			
+			for(int i=0;i<length;i++){
+				SPDR = 0xF0; WAIT_TRANSFER();
+  c4:	5f b9       	out	0x0f, r21	; 15
+  c6:	77 9b       	sbis	0x0e, 7	; 14
+  c8:	fe cf       	rjmp	.-4      	; 0xc6 <main+0x5a>
+				buffer[i] = SPDR;
+  ca:	4f b1       	in	r20, 0x0f	; 15
+  cc:	41 93       	st	Z+, r20
+			
+			SPDR = (uint8_t) page_address;			WAIT_TRANSFER();
+			SPDR = (uint8_t) (page_address>8);		WAIT_TRANSFER();
+			SPDR = (uint8_t) (page_address>>16);	WAIT_TRANSFER();
+			
+			for(int i=0;i<length;i++){
+  ce:	e8 17       	cp	r30, r24
+  d0:	f9 07       	cpc	r31, r25
+  d2:	c1 f7       	brne	.-16     	; 0xc4 <main+0x58>
+				SPDR = 0xF0; WAIT_TRANSFER();
+				buffer[i] = SPDR;
+			}
+			
+			FLASH_CS_HIGH();
+  d4:	c4 9a       	sbi	0x18, 4	; 24
+  d6:	21 50       	subi	r18, 0x01	; 1
+  d8:	31 09       	sbc	r19, r1
+	spi.spi_init(); // INIT SPI
+	
+	uint8_t buff[PAGE_SIZE]; // Page buffer
+	
+	// Read all sectors:
+	for(int page=0;page<NUM_OF_SECTORS;page++){
+  da:	21 15       	cp	r18, r1
+  dc:	31 05       	cpc	r19, r1
+  de:	f1 f6       	brne	.-68     	; 0x9c <main+0x30>
+  e0:	ff cf       	rjmp	.-2      	; 0xe0 <main+0x74>
+
+000000e2 <_exit>:
+  e2:	f8 94       	cli
+
+000000e4 <__stop_program>:
+  e4:	ff cf       	rjmp	.-2      	; 0xe4 <__stop_program>
